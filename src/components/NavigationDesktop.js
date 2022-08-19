@@ -3,12 +3,12 @@ const NavigationDesktop = (props) => {
 
   return (
     <nav>
-      <ul className='nav-ul'>
+      <ul className='main-nav'>
         {navLinksData.map((el, i) => {
           if (!el.children) {
             return (
-              <li key={i} className='nav-li'>
-                <a href='#' className='nav-link'>
+              <li key={el.id}>
+                <a href='#' className='header-nav-link'>
                   <span>{el.name}</span>
                 </a>
               </li>
@@ -16,15 +16,45 @@ const NavigationDesktop = (props) => {
           }
 
           return (
-            <li key={i} className='nav-li position-relative'>
-              <div className='nav-link'>
+            <li key={el.id} className='header-nav-options'>
+              <div className='header-nav-div'>
                 <span>{el.name}</span>
               </div>
-              <ul className='children'>
-                {el.children.map((el, i) => {
+              <ul className='header-nav-ul'>
+                {el.children.map((ele) => {
+                  if (false === false) return;
+
+                  if (!ele.children) {
+                    return (
+                      <li key={ele.id} className='sub-menu-li'>
+                        <a
+                          href='#'
+                          className='sub-menu-link'
+                          style={{ textDecoration: "none" }}
+                        >
+                          <span>{ele.name}</span>
+                        </a>
+                      </li>
+                    );
+                  }
+
                   return (
-                    <li key={i} className='child'>
-                      <span>{el.name}</span>
+                    <li key={ele.id} className='sub-menu-options'>
+                      <div className='sub-menu-div'>
+                        <span>{ele.name}</span>
+                      </div>
+                      <ul className='sub-menu-ul'>
+                        {ele.children.map((elem) => {
+                          if (false === false) return;
+                          return (
+                            <li key={elem.id} className='grand-child-link'>
+                              <a href='#'>
+                                <span>{elem.name}</span>
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </li>
                   );
                 })}
