@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 const NavigationDesktop = (props) => {
   const { navLinksData } = props;
   const [showSubMenu, setShowSubMenu] = useState([]);
+
+  const variants = {
+    open: { opacity: 1, x: 0 },
+    closed: { opacity: 0, x: "-100%" },
+  };
 
   const subMenuOnMouseEnterHandler = (subMenuId) => {
     setShowSubMenu((prev) => {
@@ -45,7 +51,11 @@ const NavigationDesktop = (props) => {
               <div className='header-nav-div'>
                 <span>{el.name}</span>
               </div>
-              <ul className='header-nav-ul'>
+              <motion.ul
+                variants={variants}
+                animate={showSubMenu[el.id] ? "open" : "closed"}
+                className='header-nav-ul'
+              >
                 {showSubMenu[el.id] &&
                   el.children.map((ele) => {
                     if (!ele.children) {
@@ -73,7 +83,11 @@ const NavigationDesktop = (props) => {
                           <span>{ele.name}</span>
                           <span className='arrow'>{"-->"}</span>
                         </div>
-                        <ul className='sub-menu-ul'>
+                        <motion.ul
+                          variants={variants}
+                          animate={showSubMenu[ele.id] ? "open" : "closed"}
+                          className='sub-menu-ul'
+                        >
                           {showSubMenu[ele.id] &&
                             ele.children.map((elem) => {
                               return (
@@ -84,11 +98,11 @@ const NavigationDesktop = (props) => {
                                 </li>
                               );
                             })}
-                        </ul>
+                        </motion.ul>
                       </li>
                     );
                   })}
-              </ul>
+              </motion.ul>
             </li>
           );
         })}
