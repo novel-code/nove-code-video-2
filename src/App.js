@@ -67,6 +67,11 @@ function App() {
           <NavigationDesktop navLinksData={navLinksData} />
         </header>
       </div>
+      <body>
+        <main className='main-content'>
+          <h1 className='heading'>Dynamic Navigation</h1>
+        </main>
+      </body>
     </div>
   );
 }
