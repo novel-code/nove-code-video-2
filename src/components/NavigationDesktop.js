@@ -1,5 +1,25 @@
+import { useState } from "react";
+
 const NavigationDesktop = (props) => {
   const { navLinksData } = props;
+  const [showSubMenu, setShowSubMenu] = useState([]);
+
+  const subMenuOnMouseEnterHandler = (subMenuId) => {
+    setShowSubMenu((prev) => {
+      console.log("running");
+      let arr = [...prev];
+      arr[subMenuId] = true;
+      return arr;
+    });
+  };
+  const subMenuOnMouseLeaveHandler = (subMenuId) => {
+    setShowSubMenu((prev) => {
+      console.log("running");
+      let arr = [...prev];
+      arr[subMenuId] = false;
+      return arr;
+    });
+  };
 
   return (
     <nav>
@@ -16,48 +36,58 @@ const NavigationDesktop = (props) => {
           }
 
           return (
-            <li key={el.id} className='header-nav-options'>
+            <li
+              onMouseEnter={(event) => subMenuOnMouseEnterHandler(el.id)}
+              onMouseLeave={(event) => subMenuOnMouseLeaveHandler(el.id)}
+              key={el.id}
+              className='header-nav-options options-hover'
+            >
               <div className='header-nav-div'>
                 <span>{el.name}</span>
               </div>
               <ul className='header-nav-ul'>
-                {el.children.map((ele) => {
-                  if (false === false) return;
+                {showSubMenu[el.id] &&
+                  el.children.map((ele) => {
+                    if (!ele.children) {
+                      return (
+                        <li key={ele.id} className='sub-menu-li'>
+                          <a
+                            href='#'
+                            className='sub-menu-link'
+                            style={{ textDecoration: "none" }}
+                          >
+                            <span>{ele.name}</span>
+                          </a>
+                        </li>
+                      );
+                    }
 
-                  if (!ele.children) {
                     return (
-                      <li key={ele.id} className='sub-menu-li'>
-                        <a
-                          href='#'
-                          className='sub-menu-link'
-                          style={{ textDecoration: "none" }}
-                        >
+                      <li
+                        onMouseEnter={() => subMenuOnMouseEnterHandler(ele.id)}
+                        onMouseLeave={() => subMenuOnMouseLeaveHandler(ele.id)}
+                        key={ele.id}
+                        className='sub-menu-options sub-menu-hover'
+                      >
+                        <div className='sub-menu-div'>
                           <span>{ele.name}</span>
-                        </a>
+                          <span className='arrow'>{"-->"}</span>
+                        </div>
+                        <ul className='sub-menu-ul'>
+                          {showSubMenu[ele.id] &&
+                            ele.children.map((elem) => {
+                              return (
+                                <li key={elem.id} className='grand-child-link'>
+                                  <a href='#'>
+                                    <span>{elem.name}</span>
+                                  </a>
+                                </li>
+                              );
+                            })}
+                        </ul>
                       </li>
                     );
-                  }
-
-                  return (
-                    <li key={ele.id} className='sub-menu-options'>
-                      <div className='sub-menu-div'>
-                        <span>{ele.name}</span>
-                      </div>
-                      <ul className='sub-menu-ul'>
-                        {ele.children.map((elem) => {
-                          if (false === false) return;
-                          return (
-                            <li key={elem.id} className='grand-child-link'>
-                              <a href='#'>
-                                <span>{elem.name}</span>
-                              </a>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </li>
-                  );
-                })}
+                  })}
               </ul>
             </li>
           );
